@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Write a review | Urban Services</title><link rel="stylesheet" th:href="@{/css/site.css}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main class="container narrow">
+    <section class="form-card">
+        <span class="eyebrow">Share your experience</span><h1>Review <span th:text="${booking.service.name}">service</span></h1>
+        <form th:action="@{/customer/reviews}" th:object="${form}" method="post">
+            <input type="hidden" th:field="*{bookingId}">
+            <div class="field"><label for="rating">Rating</label><select id="rating" th:field="*{rating}"><option value="5">5 — Excellent</option><option value="4">4 — Very good</option><option value="3">3 — Good</option><option value="2">2 — Fair</option><option value="1">1 — Poor</option></select><span class="field-error" th:errors="*{rating}"></span></div>
+            <div class="field"><label for="comment">Comment</label><textarea id="comment" th:field="*{comment}" maxlength="1000"></textarea><span class="field-error" th:errors="*{comment}"></span></div>
+            <div class="form-actions"><button class="button" type="submit">Submit review</button><a class="button secondary" th:href="@{/customer/bookings}">Cancel</a></div>
+        </form>
+    </section>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

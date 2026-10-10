@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Manage bookings | Urban Services</title><link rel="stylesheet" th:href="@{/css/site.css}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main class="container">
+    <div th:replace="~{fragments :: alerts}"></div>
+    <div class="page-heading"><div><span class="eyebrow">Administration</span><h1>Bookings</h1><p>Assign providers and update booking status.</p></div><a class="button secondary" th:href="@{/admin}">Back to dashboard</a></div>
+    <div class="table-wrap" th:if="${!bookings.isEmpty()}"><table>
+        <thead><tr><th>Customer / service</th><th>Appointment</th><th>Address</th><th>Provider</th><th>Status</th></tr></thead>
+        <tbody><tr th:each="booking : ${bookings}">
+            <td><strong th:text="${booking.customer.name}"></strong><br><span th:text="${booking.service.name}"></span></td>
+            <td><span th:text="${#temporals.format(booking.bookingDate, 'dd MMM yyyy')}"></span><br><span th:text="${booking.bookingTime}"></span></td>
+            <td th:text="${booking.address}"></td>
+            <td>
+                <form class="inline-form" th:action="@{/admin/bookings/{id}/assign(id=${booking.id})}" method="post">
+                    <select name="providerId" aria-label="Assign provider">
+                        <option value="">Unassigned</option>
+                        <option th:each="provider : ${providers}" th:value="${provider.id}" th:text="${provider.user.name}" th:selected="${booking.providerProfile != null and booking.providerProfile.id == provider.id}"></option>
+                    </select>
+                    <button class="button small" type="submit">Save</button>
+                </form>
+            </td>
+            <td>
+                <span class="status" th:classappend="' status-' + ${#strings.toLowerCase(booking.status.name())}" th:text="${booking.status.label}"></span>
+                <form class="inline-form" style="margin-top:.5rem" th:action="@{/admin/bookings/{id}/status(id=${booking.id})}" method="post">
+                    <select name="status" aria-label="Update booking status">
+                        <option th:each="status : ${statuses}" th:value="${status.name()}" th:text="${status.label}" th:selected="${booking.status == status}"></option>
+                    </select>
+                    <button class="button small" type="submit">Update</button>
+                </form>
+            </td>
+        </tr></tbody>
+    </table></div>
+    <div class="empty-state" th:if="${bookings.isEmpty()}">No bookings to manage.</div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

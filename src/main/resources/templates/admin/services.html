@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Manage services | Urban Services</title><link rel="stylesheet" th:href="@{/css/site.css}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main class="container">
+    <div th:replace="~{fragments :: alerts}"></div>
+    <div class="page-heading"><div><span class="eyebrow">Administration</span><h1>Services</h1><p>Create, update, hide, or remove service listings.</p></div><div class="form-actions"><a class="button" th:href="@{/admin/services/new}">Add service</a><a class="button secondary" th:href="@{/admin}">Dashboard</a></div></div>
+    <div class="table-wrap" th:if="${!services.isEmpty()}"><table>
+        <thead><tr><th>Service</th><th>Category</th><th>Price</th><th>Duration</th><th>Visibility</th><th>Actions</th></tr></thead>
+        <tbody><tr th:each="service : ${services}">
+            <td><strong th:text="${service.name}"></strong><br><span class="field-hint" th:text="${service.description}"></span></td>
+            <td th:text="${service.category}"></td><td th:text="'₹' + ${#numbers.formatDecimal(service.price, 1, 0)}"></td>
+            <td th:text="${service.durationMinutes} + ' min'"></td><td th:text="${service.active ? 'Active' : 'Inactive'}"></td>
+            <td>
+                <a class="button secondary small" th:href="@{/admin/services/{id}/edit(id=${service.id})}">Edit</a>
+                <form class="inline-form" th:action="@{/admin/services/{id}/delete(id=${service.id})}" method="post">
+                    <button class="button danger small" type="submit" onclick="return confirm('Delete this service?')">Delete</button>
+                </form>
+            </td>
+        </tr></tbody>
+    </table></div>
+    <div class="empty-state" th:if="${services.isEmpty()}">No services yet. Add your first listing.</div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

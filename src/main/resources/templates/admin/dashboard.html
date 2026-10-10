@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Admin dashboard | Urban Services</title><link rel="stylesheet" th:href="@{/css/site.css}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main class="container">
+    <div th:replace="~{fragments :: alerts}"></div>
+    <div class="page-heading"><div><span class="eyebrow">Administration</span><h1>Overview</h1><p>Manage the service catalog, providers, customers, and bookings.</p></div></div>
+    <div class="stats">
+        <div class="stat-card"><span>Customers</span><strong th:text="${customerCount}">0</strong></div>
+        <div class="stat-card"><span>Providers</span><strong th:text="${providerCount}">0</strong></div>
+        <div class="stat-card"><span>Services</span><strong th:text="${serviceCount}">0</strong></div>
+        <div class="stat-card"><span>Bookings</span><strong th:text="${bookingCount}">0</strong></div>
+    </div>
+    <div class="form-actions">
+        <a class="button" th:href="@{/admin/bookings}">Manage bookings</a>
+        <a class="button secondary" th:href="@{/admin/services}">Manage services</a>
+        <a class="button secondary" th:href="@{/admin/customers}">Customers</a>
+        <a class="button secondary" th:href="@{/admin/providers}">Providers</a>
+    </div>
+    <section class="panel">
+        <h2>Recent bookings</h2>
+        <div class="table-wrap" th:if="${!recentBookings.isEmpty()}"><table>
+            <thead><tr><th>Booking</th><th>Customer</th><th>Service</th><th>Date</th><th>Provider</th><th>Status</th></tr></thead>
+            <tbody><tr th:each="booking : ${recentBookings}">
+                <td th:text="'#' + ${booking.id}"></td><td th:text="${booking.customer.name}"></td><td th:text="${booking.service.name}"></td>
+                <td th:text="${#temporals.format(booking.bookingDate, 'dd MMM yyyy')}"></td>
+                <td th:text="${booking.providerProfile != null ? booking.providerProfile.user.name : 'Unassigned'}"></td>
+                <td><span class="status" th:classappend="' status-' + ${#strings.toLowerCase(booking.status.name())}" th:text="${booking.status.label}"></span></td>
+            </tr></tbody>
+        </table></div>
+        <div class="empty-state" th:if="${recentBookings.isEmpty()}">No bookings have been created yet.</div>
+    </section>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

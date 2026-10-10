@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Booking confirmed | Urban Services</title><link rel="stylesheet" th:href="@{/css/site.css}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main class="container narrow">
+    <section class="form-card">
+        <span class="eyebrow">Request received</span><h1>Booking submitted</h1>
+        <p>Your booking is saved and waiting for provider assignment.</p>
+        <div class="panel">
+            <p><strong>Service:</strong> <span th:text="${booking.service.name}"></span></p>
+            <p><strong>Date:</strong> <span th:text="${#temporals.format(booking.bookingDate, 'dd MMM yyyy')}"></span></p>
+            <p><strong>Time:</strong> <span th:text="${booking.bookingTime}"></span></p>
+            <p><strong>Address:</strong> <span th:text="${booking.address}"></span></p>
+            <p><strong>Total:</strong> <span th:text="'₹' + ${#numbers.formatDecimal(booking.totalPrice, 1, 0)}"></span></p>
+            <p><strong>Status:</strong> <span class="status" th:text="${booking.status.label}"></span></p>
+        </div>
+        <div class="form-actions"><a class="button" th:href="@{/customer/bookings}">View my bookings</a><a class="button secondary" th:href="@{/services}">Browse more services</a></div>
+    </section>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Access denied | Urban Services</title><link rel="stylesheet" th:href="@{/css/site.css}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main class="container narrow"><section class="form-card">
+    <span class="eyebrow">Access restricted</span><h1>You do not have permission to view this page.</h1>
+    <p class="welcome">Sign in with an account that has the required role, or return to the home page.</p>
+    <a class="button" th:href="@{/}">Go to home</a>
+</section></main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${service.name} + ' | Urban Services'">Service details</title>
+    <link rel="stylesheet" th:href="@{/css/site.css}">
+</head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main class="container">
+    <div th:replace="~{fragments :: alerts}"></div>
+    <p><a th:href="@{/services}">← All services</a></p>
+    <div class="detail-grid">
+        <section>
+            <span class="service-category" th:text="${service.category}">Category</span>
+            <h1 style="font-size:clamp(2.2rem,5vw,4rem);letter-spacing:-.06em;margin:.65rem 0" th:text="${service.name}">Service</h1>
+            <p style="font-size:1.08rem;color:var(--muted)" th:text="${service.description}">Description</p>
+            <section class="panel">
+                <h2>Customer reviews</h2>
+                <div class="review-list" th:if="${!service.reviews.isEmpty()}">
+                    <article class="review-item" th:each="review : ${service.reviews}">
+                        <strong th:text="${review.user.name}">Customer</strong>
+                        <span aria-label="rating" th:text="' · ' + ${review.rating} + '/5'"> · 5/5</span>
+                        <p th:text="${review.comment}">Review comment</p>
+                    </article>
+                </div>
+                <p class="field-hint" th:if="${service.reviews.isEmpty()}">No reviews yet. Customers can review a service after their booking is completed.</p>
+            </section>
+        </section>
+        <aside class="price-card">
+            <div class="eyebrow">Starting price</div>
+            <div class="price" th:text="'₹' + ${#numbers.formatDecimal(service.price, 1, 0)}">₹499</div>
+            <p th:text="${service.durationMinutes} + ' minutes'">60 minutes</p>
+            <a sec:authorize="hasRole('CUSTOMER')" class="button" style="width:100%" th:href="@{/customer/book/{id}(id=${service.id})}">Book this service</a>
+            <a sec:authorize="isAnonymous()" class="button" style="width:100%" th:href="@{/login}">Sign in to book</a>
+            <p sec:authorize="hasRole('PROVIDER') or hasRole('ADMIN')" class="field-hint">Customer accounts can book this service.</p>
+        </aside>
+    </div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

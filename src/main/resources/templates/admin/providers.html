@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Providers | Urban Services</title><link rel="stylesheet" th:href="@{/css/site.css}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main class="container">
+    <div class="page-heading"><div><span class="eyebrow">Administration</span><h1>Service providers</h1><p>Provider contact details and availability.</p></div><a class="button secondary" th:href="@{/admin}">Back to dashboard</a></div>
+    <div class="table-wrap" th:if="${!providers.isEmpty()}"><table>
+        <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Experience</th><th>Availability</th></tr></thead>
+        <tbody><tr th:each="provider : ${providers}">
+            <td th:text="${provider.user.name}"></td><td th:text="${provider.user.email}"></td><td th:text="${provider.user.phone}"></td>
+            <td th:text="${provider.experience} + ' years'"></td><td th:text="${provider.availability}"></td>
+        </tr></tbody>
+    </table></div>
+    <div class="empty-state" th:if="${providers.isEmpty()}">No providers have registered yet.</div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

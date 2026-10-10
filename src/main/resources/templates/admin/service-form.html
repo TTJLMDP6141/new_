@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title th:text="${editing ? 'Edit service' : 'Add service'} + ' | Urban Services'">Service</title><link rel="stylesheet" th:href="@{/css/site.css}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main class="container narrow">
+    <section class="form-card">
+        <span class="eyebrow">Service catalog</span><h1 th:text="${editing ? 'Edit service' : 'Add a service'}">Add a service</h1>
+        <form th:object="${form}" th:action="${editing} ? @{/admin/services/{id}(id=${serviceId})} : @{/admin/services}" method="post">
+            <div class="field"><label for="name">Name</label><input id="name" th:field="*{name}"><span class="field-error" th:errors="*{name}"></span></div>
+            <div class="field"><label for="category">Category</label><input id="category" th:field="*{category}"><span class="field-error" th:errors="*{category}"></span></div>
+            <div class="field"><label for="description">Description</label><textarea id="description" th:field="*{description}"></textarea><span class="field-error" th:errors="*{description}"></span></div>
+            <div class="field"><label for="price">Price (₹)</label><input id="price" type="number" min="1" step="0.01" th:field="*{price}"><span class="field-error" th:errors="*{price}"></span></div>
+            <div class="field"><label for="durationMinutes">Duration (minutes)</label><input id="durationMinutes" type="number" min="1" th:field="*{durationMinutes}"><span class="field-error" th:errors="*{durationMinutes}"></span></div>
+            <div class="field"><label for="imageUrl">Image URL (optional)</label><input id="imageUrl" type="url" th:field="*{imageUrl}"><span class="field-error" th:errors="*{imageUrl}"></span></div>
+            <label class="check-field"><input type="checkbox" th:field="*{active}"> Active and visible to customers</label>
+            <div class="form-actions"><button class="button" type="submit" th:text="${editing ? 'Save changes' : 'Create service'}">Create service</button><a class="button secondary" th:href="@{/admin/services}">Cancel</a></div>
+        </form>
+    </section>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<header class="site-header" th:fragment="header">
+    <a class="brand" th:href="@{/}">Urban<span>Services</span></a>
+    <nav class="nav-links" aria-label="Main navigation">
+        <a th:href="@{/services}">Services</a>
+        <a sec:authorize="hasRole('CUSTOMER')" th:href="@{/customer}">My bookings</a>
+        <a sec:authorize="hasRole('PROVIDER')" th:href="@{/provider}">Provider dashboard</a>
+        <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin}">Admin</a>
+        <a sec:authorize="hasRole('CUSTOMER')" th:href="@{/customer/profile}">Profile</a>
+        <a sec:authorize="hasRole('PROVIDER')" th:href="@{/provider/profile}">Profile</a>
+        <a sec:authorize="isAnonymous()" th:href="@{/login}">Sign in</a>
+        <a sec:authorize="isAnonymous()" th:href="@{/register}">Create account</a>
+        <form class="nav-form" sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
+            <button type="submit">Sign out</button>
+        </form>
+    </nav>
+</header>
+
+<div th:fragment="alerts" aria-live="polite">
+    <p class="alert" th:if="${success}" th:text="${success}"></p>
+    <p class="alert error" th:if="${error}" th:text="${error}"></p>
+</div>
+
+<footer class="site-footer" th:fragment="footer">
+    Urban Services · Home services made easier
+</footer>
+</body>
+</html>

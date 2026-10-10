@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Customers | Urban Services</title><link rel="stylesheet" th:href="@{/css/site.css}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main class="container">
+    <div class="page-heading"><div><span class="eyebrow">Administration</span><h1>Customers</h1><p>Registered customer accounts.</p></div><a class="button secondary" th:href="@{/admin}">Back to dashboard</a></div>
+    <div class="table-wrap" th:if="${!customers.isEmpty()}"><table>
+        <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Joined</th></tr></thead>
+        <tbody><tr th:each="customer : ${customers}">
+            <td th:text="${customer.name}"></td><td th:text="${customer.email}"></td><td th:text="${customer.phone}"></td>
+            <td th:text="${#temporals.format(customer.createdAt, 'dd MMM yyyy')}"></td>
+        </tr></tbody>
+    </table></div>
+    <div class="empty-state" th:if="${customers.isEmpty()}">No customers have registered yet.</div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Services | Urban Services</title><link rel="stylesheet" th:href="@{/css/site.css}">
+</head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main class="container">
+    <div th:replace="~{fragments :: alerts}"></div>
+    <div class="page-heading">
+        <div><span class="eyebrow">Service catalog</span><h1>Find help for your home</h1><p>Browse and search available services.</p></div>
+        <form class="search-form" th:action="@{/services}" method="get">
+            <label class="field" style="margin:0; flex:1"><span class="field-hint">Search services</span><input name="search" th:value="${search}" placeholder="Try cleaning or repair"></label>
+            <button class="button" type="submit">Search</button>
+        </form>
+    </div>
+    <div class="service-grid" th:if="${!services.isEmpty()}">
+        <article class="service-card" th:each="service : ${services}">
+            <span class="service-category" th:text="${service.category}">Category</span>
+            <h3 th:text="${service.name}">Service name</h3>
+            <p th:text="${service.description}">Description</p>
+            <div class="service-meta">
+                <strong th:text="'₹' + ${#numbers.formatDecimal(service.price, 1, 0)}">₹499</strong>
+                <span th:text="${service.durationMinutes} + ' min'">60 min</span>
+            </div>
+            <a class="button secondary" style="margin-top:1rem" th:href="@{/services/{id}(id=${service.id})}">View details</a>
+        </article>
+    </div>
+    <div class="empty-state" th:if="${services.isEmpty()}">No services matched that search. Try another word or category.</div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

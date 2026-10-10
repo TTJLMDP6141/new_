@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>My profile | Urban Services</title><link rel="stylesheet" th:href="@{/css/site.css}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main class="container narrow">
+    <div th:replace="~{fragments :: alerts}"></div>
+    <section class="form-card">
+        <span class="eyebrow">Account settings</span><h1>My profile</h1>
+        <form th:action="@{/customer/profile}" th:object="${form}" method="post">
+            <div class="field"><label for="name">Name</label><input id="name" th:field="*{name}"><span class="field-error" th:errors="*{name}"></span></div>
+            <div class="field"><label for="email">Email</label><input id="email" type="email" th:field="*{email}"><span class="field-error" th:errors="*{email}"></span></div>
+            <div class="field"><label for="phone">Phone</label><input id="phone" th:field="*{phone}"><span class="field-error" th:errors="*{phone}"></span></div>
+            <button class="button" type="submit">Save profile</button>
+        </form>
+    </section>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

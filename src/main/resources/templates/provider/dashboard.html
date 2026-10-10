@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Provider dashboard | Urban Services</title><link rel="stylesheet" th:href="@{/css/site.css}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main class="container">
+    <div th:replace="~{fragments :: alerts}"></div>
+    <div class="page-heading"><div><span class="eyebrow">Provider workspace</span><h1>Your assigned work</h1><p>Review appointments and update their progress.</p></div><a class="button secondary" th:href="@{/provider/profile}">Edit profile</a></div>
+    <div class="stats">
+        <div class="stat-card"><span>Pending</span><strong th:text="${pendingCount}">0</strong></div>
+        <div class="stat-card"><span>Active</span><strong th:text="${activeCount}">0</strong></div>
+        <div class="stat-card"><span>Completed</span><strong th:text="${completedCount}">0</strong></div>
+    </div>
+    <div class="table-wrap" th:if="${!bookings.isEmpty()}"><table>
+        <thead><tr><th>Appointment</th><th>Customer</th><th>Service</th><th>Address / phone</th><th>Status</th><th>Update</th></tr></thead>
+        <tbody><tr th:each="booking : ${bookings}">
+            <td><strong th:text="${#temporals.format(booking.bookingDate, 'dd MMM yyyy')}"></strong><br><span th:text="${booking.bookingTime}"></span></td>
+            <td th:text="${booking.customer.name}">Customer</td>
+            <td th:text="${booking.service.name}">Service</td>
+            <td><span th:text="${booking.address}"></span><br><span th:text="${booking.phone}"></span></td>
+            <td><span class="status" th:classappend="' status-' + ${#strings.toLowerCase(booking.status.name())}" th:text="${booking.status.label}">Pending</span></td>
+            <td>
+                <form class="inline-form" th:if="${booking.status.name() == 'PENDING'}" th:action="@{/provider/bookings/{id}/status(id=${booking.id})}" method="post">
+                    <input type="hidden" name="status" value="ACCEPTED"><button class="button small" type="submit">Accept</button>
+                </form>
+                <form class="inline-form" th:if="${booking.status.name() == 'PENDING'}" th:action="@{/provider/bookings/{id}/status(id=${booking.id})}" method="post">
+                    <input type="hidden" name="status" value="CANCELLED"><button class="button danger small" type="submit" onclick="return confirm('Reject this booking?')">Reject</button>
+                </form>
+                <form class="inline-form" th:if="${booking.status.name() == 'ACCEPTED'}" th:action="@{/provider/bookings/{id}/status(id=${booking.id})}" method="post">
+                    <input type="hidden" name="status" value="IN_PROGRESS"><button class="button small" type="submit">Start job</button>
+                </form>
+                <form class="inline-form" th:if="${booking.status.name() == 'IN_PROGRESS'}" th:action="@{/provider/bookings/{id}/status(id=${booking.id})}" method="post">
+                    <input type="hidden" name="status" value="COMPLETED"><button class="button small" type="submit">Mark completed</button>
+                </form>
+                <span class="field-hint" th:if="${booking.status.name() == 'COMPLETED' or booking.status.name() == 'CANCELLED'}">No action</span>
+            </td>
+        </tr></tbody>
+    </table></div>
+    <div class="empty-state" th:if="${bookings.isEmpty()}">No bookings have been assigned to you yet.</div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

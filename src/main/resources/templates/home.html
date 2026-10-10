@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Urban Services | Home</title>
+    <link rel="stylesheet" th:href="@{/css/site.css}">
+</head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main class="container">
+    <div th:replace="~{fragments :: alerts}"></div>
+    <section class="hero">
+        <div>
+            <span class="eyebrow">Reliable help, right at home</span>
+            <h1>Make room for the things you love.</h1>
+            <p>Book trusted help for cleaning, repairs, personal care, and everyday home needs.</p>
+            <div class="form-actions">
+                <a class="button" th:href="@{/services}">Explore services</a>
+                <a class="button secondary" sec:authorize="isAnonymous()" th:href="@{/register}">Create an account</a>
+            </div>
+        </div>
+        <div class="hero-mark" aria-hidden="true">US</div>
+    </section>
+
+    <div class="section-heading">
+        <div><span class="eyebrow">Popular services</span><h2>Help for your home</h2></div>
+        <a th:href="@{/services}">View all services</a>
+    </div>
+    <div class="service-grid" th:if="${!services.isEmpty()}">
+        <article class="service-card" th:each="service : ${services}">
+            <span class="service-category" th:text="${service.category}">Category</span>
+            <h3 th:text="${service.name}">Service name</h3>
+            <p th:text="${service.description}">Description</p>
+            <div class="service-meta">
+                <strong th:text="'₹' + ${#numbers.formatDecimal(service.price, 1, 0)}">₹499</strong>
+                <span th:text="${service.durationMinutes} + ' min'">60 min</span>
+            </div>
+            <a class="button secondary" style="margin-top:1rem" th:href="@{/services/{id}(id=${service.id})}">View details</a>
+        </article>
+    </div>
+    <div class="empty-state" th:if="${services.isEmpty()}">Services will appear here when they are available.</div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

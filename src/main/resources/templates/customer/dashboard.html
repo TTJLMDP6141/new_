@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Customer dashboard | Urban Services</title><link rel="stylesheet" th:href="@{/css/site.css}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main class="container">
+    <div th:replace="~{fragments :: alerts}"></div>
+    <div class="page-heading"><div><span class="eyebrow">Customer space</span><h1>Hello, <span th:text="${user.name}">Customer</span></h1><p>Manage your bookings and find your next service.</p></div><a class="button" th:href="@{/services}">Book a service</a></div>
+    <div class="stats">
+        <div class="stat-card"><span>Upcoming bookings</span><strong th:text="${upcomingCount}">0</strong></div>
+        <div class="stat-card"><span>Completed bookings</span><strong th:text="${completedCount}">0</strong></div>
+    </div>
+    <section class="panel">
+        <div class="section-heading" style="margin:0 0 1rem"><h2>Recent bookings</h2><a th:href="@{/customer/bookings}">View all</a></div>
+        <div class="table-wrap" th:if="${!bookings.isEmpty()}">
+            <table><thead><tr><th>Service</th><th>Date</th><th>Time</th><th>Status</th><th></th></tr></thead>
+                <tbody><tr th:each="booking : ${bookings}">
+                    <td th:text="${booking.service.name}">Service</td>
+                    <td th:text="${#temporals.format(booking.bookingDate, 'dd MMM yyyy')}">Date</td>
+                    <td th:text="${booking.bookingTime}">Time</td>
+                    <td><span class="status" th:classappend="' status-' + ${#strings.toLowerCase(booking.status.name())}" th:text="${booking.status.label}">Pending</span></td>
+                    <td><a th:href="@{/customer/bookings}">Details</a></td>
+                </tr></tbody>
+            </table>
+        </div>
+        <div class="empty-state" th:if="${bookings.isEmpty()}">You have no bookings yet. Browse services to get started.</div>
+    </section>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

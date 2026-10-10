@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>My bookings | Urban Services</title><link rel="stylesheet" th:href="@{/css/site.css}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main class="container">
+    <div th:replace="~{fragments :: alerts}"></div>
+    <div class="page-heading"><div><span class="eyebrow">Your account</span><h1>My bookings</h1><p>Track appointments, cancel eligible requests, and review completed work.</p></div><a class="button" th:href="@{/services}">Book a service</a></div>
+    <div class="table-wrap" th:if="${!bookings.isEmpty()}"><table>
+        <thead><tr><th>Service</th><th>Date &amp; time</th><th>Provider</th><th>Address</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody><tr th:each="booking : ${bookings}">
+            <td><strong th:text="${booking.service.name}">Service</strong><br><span th:text="'₹' + ${#numbers.formatDecimal(booking.totalPrice, 1, 0)}"></span></td>
+            <td><span th:text="${#temporals.format(booking.bookingDate, 'dd MMM yyyy')}"></span><br><span th:text="${booking.bookingTime}"></span></td>
+            <td th:text="${booking.providerProfile != null ? booking.providerProfile.user.name : 'Not assigned'}">Not assigned</td>
+            <td th:text="${booking.address}">Address</td>
+            <td><span class="status" th:classappend="' status-' + ${#strings.toLowerCase(booking.status.name())}" th:text="${booking.status.label}">Pending</span></td>
+            <td>
+                <form class="inline-form" th:if="${booking.status.name() == 'PENDING' or booking.status.name() == 'ACCEPTED'}" th:action="@{/customer/bookings/{id}/cancel(id=${booking.id})}" method="post">
+                    <button class="button danger small" type="submit" onclick="return confirm('Cancel this booking?')">Cancel</button>
+                </form>
+                <a class="button small" th:if="${booking.status.name() == 'COMPLETED' and booking.review == null}" th:href="@{/customer/reviews/{id}(id=${booking.id})}">Write review</a>
+                <span class="field-hint" th:if="${booking.review != null}">Reviewed</span>
+            </td>
+        </tr></tbody>
+    </table></div>
+    <div class="empty-state" th:if="${bookings.isEmpty()}">You have no bookings yet.</div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>
